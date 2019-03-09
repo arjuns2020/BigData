@@ -1,0 +1,26 @@
+#starting Hive Server
+$ sudo service zookeeper-server start
+$ sudo service hive-server2 start
+
+#create table for webpage data imported 
+CREATE EXTERNAL TABLE webpage
+(page_id SMALLINT,
+name STRING,
+assoc_files STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+LOCATION '/loudacre/webpage'
+
+#test the query
+SELECT * FROM webpage WHERE name LIKE "ifruit%"
+
+#Use Sqoop to Import Directly into Hive and Impala
+
+$ sqoop import \
+--connect jdbc:mysql://localhost/loudacre \
+--username training --password training \
+--fields-terminated-by '\t' \
+--table device \
+--hive-import
+
+#--hive-import for	either	Impala	or	Hive;	this	adds	metadata	to	the	Metastore,	which	both	tools	use
